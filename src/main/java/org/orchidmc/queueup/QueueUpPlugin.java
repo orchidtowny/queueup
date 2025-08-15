@@ -1,6 +1,5 @@
 package org.orchidmc.queueup;
 
-import com.google.gson.annotations.SerializedName;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -12,14 +11,12 @@ import static org.orchidmc.queueup.util.MessageUtil.formatSongMessage;
 public class QueueUpPlugin extends JavaPlugin {
     private Thread mainThread;
 
-    private BukkitAudiences adventure;
     private String lastSongName = "";
     static boolean debugLogging = false;
 
     @Override
     public void onEnable() {
         debugLogging = false;
-        adventure = BukkitAudiences.create(this);
 
         this.getConfig().addDefault("url", "https://www.queup.net/join/orchid");
         this.getConfig().addDefault("room-id", "689386756ad9fd0007f2ad79");
@@ -35,7 +32,7 @@ public class QueueUpPlugin extends JavaPlugin {
                 if (song != null && !song.songName.equalsIgnoreCase(lastSongName)) {
                     lastSongName = song.songName;
                     Component message = formatSongMessage(song);
-                    adventure.all().sendMessage(message);
+                    Bukkit.broadcast(message);
                 }
                 Thread.sleep(this.getConfig().getInt("poll-interval", 60) * 1000L);
             } catch (Exception e) { return; }
@@ -46,6 +43,5 @@ public class QueueUpPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         mainThread.interrupt();
-        if (adventure != null) adventure.close();
     }
 }
