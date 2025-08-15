@@ -1,4 +1,4 @@
 name: QueueUp
-version: 1.0
+version: 2025.8.1.0
 main: org.orchidmc.queueup.QueueUpPlugin
 api-version: 1.20
