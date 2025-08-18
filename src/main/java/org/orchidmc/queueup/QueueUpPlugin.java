@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.orchidmc.queueup.model.QueUpSong;
 
+import static java.lang.Thread.sleep;
 import static org.orchidmc.queueup.util.MessageUtil.formatSongMessage;
 
 public class QueueUpPlugin extends JavaPlugin {
@@ -27,15 +28,17 @@ public class QueueUpPlugin extends JavaPlugin {
         saveConfig();
 
         mainThread = new Thread(() -> {
-            try {
-                QueUpSong song = QueUpFetcher.fetchCurrentSong();
-                if (song != null && !song.songName.equalsIgnoreCase(lastSongName)) {
-                    lastSongName = song.songName;
-                    Component message = formatSongMessage(song);
-                    Bukkit.broadcast(message);
-                }
-                Thread.sleep(this.getConfig().getInt("poll-interval", 60) * 1000L);
-            } catch (Exception e) { return; }
+            while (!Thread.interrupted()) {
+                try {
+                    QueUpSong song = QueUpFetcher.fetchCurrentSong();
+                    if (song != null && !song.songName.equalsIgnoreCase(lastSongName)) {
+                        lastSongName = song.songName;
+                        Component message = formatSongMessage(song);
+                        Bukkit.broadcast(message);
+                    }
+                    sleep(this.getConfig().getInt("poll-interval", 60) * 1000L);
+                } catch (Exception e) { return; }
+            }
         });
         mainThread.start();
     }
