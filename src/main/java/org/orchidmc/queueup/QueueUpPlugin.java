@@ -19,7 +19,7 @@ public class QueueUpPlugin extends JavaPlugin {
     public void onEnable() {
         debugLogging = false;
 
-        this.getConfig().addDefault("url", "https://www.queup.net/join/orchid");
+        this.getConfig().addDefault("url", "https://www.queup.net/join/choco");
         this.getConfig().addDefault("room-id", "689386756ad9fd0007f2ad79");
         this.getConfig().addDefault("poll-interval", 60);
         this.getConfig().addDefault("song-msg", "<gray>We are listening to <yellow>$songName</yellow> (queued by <yellow>$username</yellow>) <u><yellow><click:open_url:'$url'>Come join us!</click></yellow></u>");
